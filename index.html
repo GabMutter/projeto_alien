@@ -16,7 +16,7 @@
     <title>alien</title>
 </head>
 <body>
-    <script>        // tamanho do layout da imagem
+    <script>      
         const larguraJogo = 700;
         const alturaJogo = 700;
 
@@ -24,7 +24,7 @@
             type: Phaser.AUTO,
             width: larguraJogo,
             height: alturaJogo,
-                    //aplicação de gravidade no jogo
+                    
             physics: {
                 default: 'arcade',
                 arcade: {
@@ -41,7 +41,7 @@
         };
 
         const game = new Phaser.Game(config);
-                    //variaveis criadas
+                    
         var alien;
         var fogo;
         var plataforma;
@@ -50,9 +50,9 @@
         var pontuacao = 0;
         var placar;
         var fogoAzul
-                    //imagens carregadas
+                    
         function preload() {
-            this.load.image('background', 'assets/bg_space.png');
+            this.load.image('bg', 'assets/bg_space.png');
             this.load.image('player', 'assets/alienigena2.png');
             this.load.image('turbo_nave', 'assets/turbo2.png');
             this.load.image('plataforma', 'assets/planet.png');
@@ -62,29 +62,29 @@
         }
 
         function create() {
-            this.add.image(larguraJogo / 2, alturaJogo / 2, 'background');
-                    //criando o turbo da nave 
+            this.add.image(larguraJogo / 2, alturaJogo / 2, 'bg');
+                    
             fogo = this.add.sprite(0, 0, 'turbo_nave');
             fogo.setVisible(false)
 
             fogoAzul = this.add.sprite(0, 0, 'turbo_nitro');
             fogoAzul.setVisible(false)
-                    //criando o alien
+                    
             alien = this.physics.add.sprite(larguraJogo / 2, 0, 'player');
             alien.setCollideWorldBounds(true);
-                    //criando a primeira plataforma
+                    
             plataforma = this.physics.add.staticImage(550, 300, 'plataforma');
             this.physics.add.collider(alien, plataforma,);
-                    //criando a segundo plataforma
+                    
             outra_plataforma = this.physics.add.staticImage(150, 450, 'outra_plataforma');
             this.physics.add.collider(alien, outra_plataforma);
-                    //criando a moeda
+                    
             moeda = this.physics.add.sprite(larguraJogo / 2, 0, 'moeda');
             moeda.setCollideWorldBounds(true);
             moeda.setBounce(0.5);
             this.physics.add.collider(moeda, plataforma)
             this.physics.add.collider(moeda, outra_plataforma)
-                    //criando o placar
+                    
             placar = this.add.text(50, 50, 'estrelas: ' + pontuacao, { fontSize: '45px', fill: '#495613' });
             this.physics.add.overlap(alien, moeda, function () {
 
@@ -110,7 +110,7 @@
             this.keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT)
         }
                     
-        function update() {         //adcionando movimento ao alien
+        function update() {         
             if (this.keyA.isDown) {
                 alien.setVelocityX(-150);
             } else if (this.keyD.isDown) {
@@ -132,20 +132,20 @@
             if (this.keySHIFT.isDown) {
                 if (this.keyW.isDown) {
                     alien.setVelocityY(-300);
-                    ativarTurbo();
+                    ativarOutroTurbo();
                 } else {
-                    semTurbo();
+                    semOutroTurbo();
                 }
-                ativarOutroTurbo();
             }
             else{
                 semOutroTurbo()
             }
 
-            fogo.setPosition(alien.x, alien.y + alien.height / 2);
-            fogoAzul.setPosition(alien.x, alien.y + alien.height / 2);
+        fogo.setPosition(alien.x, alien.y + alien.height / 2);
+        fogoAzul.setPosition(alien.x, alien.y + alien.height / 2);
+
         }
-                //função de ativar e desativar o fogo da nave 
+                
         function ativarTurbo() {
             fogo.setVisible(true);
         }
