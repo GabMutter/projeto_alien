@@ -43,7 +43,6 @@
         const game = new Phaser.Game(config);
                     //variaveis criadas
         var alien;
-        var teclado;
         var fogo;
         var plataforma;
         var outra_plataforma;
@@ -94,23 +93,29 @@
 
                 moeda.setVisible(true);
             });
-                    //
-            teclado = this.input.keyboard.createCursorKeys();
+
+            this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+
+            this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+
+            this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+
+            this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
         }
-                    //adcionando movimento ao alien
-        function update() {
-            if (teclado.left.isDown) {
+                    
+        function update() {         //adcionando movimento ao alien
+            if (this.keyA.isDown) {
                 alien.setVelocityX(-150);
-            } else if (teclado.right.isDown) {
+            } else if (this.keyD.isDown) {
                 alien.setVelocityX(150);
             } else {
                 alien.setVelocityX(0);
             }
 
-            if (teclado.up.isDown) {
+            if (this.keyW.isDown) {
                 alien.setVelocityY(-150);
                 ativarTurbo();
-            } else if (teclado.down.isDown){
+            } else if (this.keyS.isDown){
                 alien.setVelocityY(250);
                 semTurbo();
             } else {
