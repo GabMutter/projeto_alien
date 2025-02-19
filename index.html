@@ -83,7 +83,7 @@
             fogoAzul = this.add.sprite(0, 0, 'turbo_nitro');
             fogoAzul.setVisible(false)
                     
-            alien = this.physics.add.sprite(larguraJogo/2, alturaJogo/2, 'player');
+            alien = this.physics.add.sprite(1000, 1000, 'player');
             alien.setCollideWorldBounds(true); 
                     
             plataforma = this.physics.add.staticImage(190, 1660, 'plataforma');
@@ -119,7 +119,8 @@
             this.physics.add.collider(moeda, plataforma7);
             moeda.setBounce(0.2);
 
-            placar = this.add.text(50, 50, 'estrelas: ' + pontuacao, { fontSize: '45px', fill: '#495613' });
+            placar = this.add.text(50, 50, 'estrelas: ' + pontuacao, { fontSize: '45px', fill: '#B9B620' });
+            placar.setScrollFactor(0);
             this.physics.add.overlap(alien, moeda, function () {
                 moeda.setVisible(false);
 
