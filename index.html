@@ -46,13 +46,7 @@
                     
         var alien;
         var fogo;
-        var plataforma;
-        var plataforma2;
-        var plataforma3
-        var plataforma4
-        var plataforma5
-        var plataforma6
-        var plataforma7
+        var plataformas = [];
         var moeda;
         var pontuacao = 0;
         var placar;
@@ -85,38 +79,31 @@
                     
             alien = this.physics.add.sprite(1000, 1000, 'player');
             alien.setCollideWorldBounds(true); 
-                    
-            plataforma = this.physics.add.staticImage(190, 1660, 'plataforma');
-            this.physics.add.collider(alien, plataforma);
-                    
-            plataforma2 = this.physics.add.staticImage(220, 380, 'plataforma2');
-            this.physics.add.collider(alien, plataforma2);
 
-            plataforma3 = this.physics.add.staticImage(300, 1140, 'plataforma3');
-            this.physics.add.collider(alien, plataforma3);
+            const plataformasConfig = [
+                { x: 190, y: 1660, key: 'plataforma' },
+                { x: 220, y: 380, key: 'plataforma2' },
+                { x: 300, y: 1140, key: 'plataforma3' },
+                { x: 1780, y: 1020, key: 'plataforma4' },
+                { x: 970, y: 760, key: 'plataforma5' },
+                { x: 1430, y: 1500, key: 'plataforma6' },
+                { x: 1610, y: 280, key: 'plataforma7' }
+            ];
 
-            plataforma4 = this.physics.add.staticImage(1780, 1020, 'plataforma4');
-            this.physics.add.collider(alien, plataforma4);
+            plataformasConfig.forEach(config => {
+                let plataforma = this.physics.add.staticImage(config.x, config.y, config.key);
+                this.physics.add.collider(alien, plataforma);
+                plataformas.push(plataforma);
+            });
 
-            plataforma5 = this.physics.add.staticImage(970, 760, 'plataforma5');
-            this.physics.add.collider(alien, plataforma5);
-
-            plataforma6 = this.physics.add.staticImage(1430, 1500, 'plataforma6');
-            this.physics.add.collider(alien, plataforma6);
-
-            plataforma7 = this.physics.add.staticImage(1610, 280, 'plataforma7');
-            this.physics.add.collider(alien, plataforma7);
-                    
             moeda = this.physics.add.sprite(larguraJogo / 2, 0, 'moeda');
             moeda.setCollideWorldBounds(true); 
             this.physics.world.setBounds(1, 1, 2200, 2000);
-            this.physics.add.collider(moeda, plataforma);
-            this.physics.add.collider(moeda, plataforma2);
-            this.physics.add.collider(moeda, plataforma3);
-            this.physics.add.collider(moeda, plataforma4);
-            this.physics.add.collider(moeda, plataforma5);
-            this.physics.add.collider(moeda, plataforma6);
-            this.physics.add.collider(moeda, plataforma7);
+            
+            plataformas.forEach(plataforma => {
+                this.physics.add.collider(moeda, plataforma);
+            });
+            
             moeda.setBounce(0.2);
 
             placar = this.add.text(50, 50, 'estrelas: ' + pontuacao, { fontSize: '45px', fill: '#B9B620' });
