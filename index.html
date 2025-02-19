@@ -19,7 +19,7 @@
 <body>
     <script>
         const larguraJogo = 1100;
-        const alturaJogo = 1000;
+        const alturaJogo = 1000; //tamanho que o jogo vai ficar na tela do computador
 
         const config = {
             type: Phaser.AUTO,
@@ -27,7 +27,7 @@
                 width: 1300,
                 height: 700,
 
-            physics: {
+            physics: {//aplicação de grvidade no jogo
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 175 },
@@ -44,7 +44,7 @@
 
         const game = new Phaser.Game(config);
                     
-        var alien;
+        var alien; //todas as variaveis criadas para o jogo
         var fogo;
         var plataformas = [];
         var moeda;
@@ -53,7 +53,7 @@
         var fogoAzul;
         var moveCam = false;
 
-        function preload() {
+        function preload() {    //todas as imgens do jogo estão sendo carregadas aqui
             this.load.image('bg', 'assets/bg_space.png');
             this.load.image('player', 'assets/alienigena2.png');
             this.load.image('turbo_nave', 'assets/turbo2.png');
@@ -71,16 +71,16 @@
         function create() {
             this.add.image(larguraJogo, alturaJogo, 'bg');
                     
-            fogo = this.add.sprite(0, 0, 'turbo_nave');
-            fogo.setVisible(false)
+            fogo = this.add.sprite(0, 0, 'turbo_nave'); 
+            fogo.setVisible(false) //o fogo foi adicionado, mas ele não aparece, pois ele foi configurado para aparecer apenas quando apertar para se mover
 
             fogoAzul = this.add.sprite(0, 0, 'turbo_nitro');
-            fogoAzul.setVisible(false)
+            fogoAzul.setVisible(false)  // o outro fogo que eu quis colocar mais por estetica, para parecer que a pessoa está indo mais rapido
                     
-            alien = this.physics.add.sprite(1000, 1000, 'player');
-            alien.setCollideWorldBounds(true); 
+            alien = this.physics.add.sprite(1000, 1000, 'player');  //nosso personagem foi adicionado ao jogo
+            alien.setCollideWorldBounds(true); //crinado borda, para que ele não navegue infinitamente pela tela
 
-            const plataformasConfig = [
+            const plataformasConfig = [ //todos os planetas carregados e com suas coordenadas fixas
                 { x: 190, y: 1660, key: 'plataforma' },
                 { x: 220, y: 380, key: 'plataforma2' },
                 { x: 300, y: 1140, key: 'plataforma3' },
@@ -90,24 +90,24 @@
                 { x: 1610, y: 280, key: 'plataforma7' }
             ];
 
-            plataformasConfig.forEach(config => {
-                let plataforma = this.physics.add.staticImage(config.x, config.y, config.key);
-                this.physics.add.collider(alien, plataforma);
+            plataformasConfig.forEach(config => { // aqui é o codigo que faz a array funcinar 
+                let plataforma = this.physics.add.staticImage(config.x, config.y, config.key); 
+                this.physics.add.collider(alien, plataforma); //aqui fala que o alien colide com as plataformas 
                 plataformas.push(plataforma);
-            });
+            }); 
 
-            moeda = this.physics.add.sprite(larguraJogo / 2, 0, 'moeda');
-            moeda.setCollideWorldBounds(true); 
-            this.physics.world.setBounds(1, 1, 2200, 2000);
-            
+            moeda = this.physics.add.sprite(larguraJogo / 2, 0, 'moeda'); //adicionando as estralas para o jogo
+            moeda.setCollideWorldBounds(true); //falando que elas respeitam as bordas do jogo
+            this.physics.world.setBounds(1, 1, 2200, 2000); //tamanho das bordas do jogo, fala que ele começa no 
+                                                            // ponto y:1 e x:1 e termina no ponto y:2000 e x:2000
             plataformas.forEach(plataforma => {
-                this.physics.add.collider(moeda, plataforma);
+                this.physics.add.collider(moeda, plataforma);// as moedas colidem com as plataformas 
             });
             
             moeda.setBounce(0.2);
 
             placar = this.add.text(50, 50, 'estrelas: ' + pontuacao, { fontSize: '45px', fill: '#B9B620' });
-            placar.setScrollFactor(0);
+            placar.setScrollFactor(0); // o placar, pra mostrar quantas estralas ja pegou
             this.physics.add.overlap(alien, moeda, function () {
                 moeda.setVisible(false);
 
@@ -125,14 +125,14 @@
             this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
             this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
             this.keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
-            this.cursors = this.input.keyboard.createCursorKeys();
+            this.cursors = this.input.keyboard.createCursorKeys(); //os contrlos, que ao inves das setas eu quis colocar no WASD
             
             this.cameras.main.setBounds(0, 0, larguraJogo * 2, alturaJogo * 2);
             this.cameras.main.startFollow(alien, true);
-            this.cameras.main.setDeadzone(200, 100);
+            this.cameras.main.setDeadzone(200, 100); // o que faz a camera mexer e seguir o personagem
         }
 
-        function update() {         
+        function update() {   // aqui fala quanto o personagem vai andar quando apertar as teclas
             if (this.keyA.isDown) {
                 alien.setVelocityX(-200);
             } else if (this.keyD.isDown) {
@@ -151,7 +151,7 @@
                 semTurbo();
             }
 
-            if (this.keySHIFT.isDown) {
+            if (this.keySHIFT.isDown) { // e aqui é a parte do nitro que eu acrescentei
                 if (this.keyW.isDown) {
                     alien.setVelocityY(-600);
                     ativarOutroTurbo();
@@ -170,10 +170,10 @@
             }
 
             fogo.setPosition(alien.x, alien.y + alien.height / 2);
-            fogoAzul.setPosition(alien.x, alien.y + alien.height / 2);
+            fogoAzul.setPosition(alien.x, alien.y + alien.height / 2); //aqui fala onde o fogo vai aparecer, pra ele ficar certinho no alien
             
-            if (moveCam) {
-                if (this.cursors.left.isDown) {
+            if (moveCam) { //e aqui é o que faz a camera mexer mesmo, então quando o personagem chega no fim da zona a imagem mexe
+                if (this.cursors.left.isDown) { 
                     this.cameras.main.scrollX -= 4;
                 }
                 else if (this.cursors.right.isDown) {
@@ -188,7 +188,7 @@
             }
         }
 
-        function ativarTurbo() {
+        function ativarTurbo() { //aqui fala quando o fogo deve ou não aparecer
             fogo.setVisible(true);
         }
 
