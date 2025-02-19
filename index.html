@@ -11,25 +11,27 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            background-color: black;
         }
     </style>
     <title>alien</title>
 </head>
 <body>
-    <script>      
-        const larguraJogo = 700;
-        const alturaJogo = 700;
+    <script>
+        const larguraJogo = 1100;
+        const alturaJogo = 1000;
 
         const config = {
             type: Phaser.AUTO,
-            width: larguraJogo,
-            height: alturaJogo,
-                    
+            mode: Phaser.Scale.Fit,
+                width: 1300,
+                height: 700,
+
             physics: {
                 default: 'arcade',
                 arcade: {
-                    gravity: { y: 300 },
-                    debug: false
+                    gravity: { y: 175 },
+                    debug: true
                 }
             },
 
@@ -45,24 +47,35 @@
         var alien;
         var fogo;
         var plataforma;
-        var outra_plataforma;
+        var plataforma2;
+        var plataforma3
+        var plataforma4
+        var plataforma5
+        var plataforma6
+        var plataforma7
         var moeda;
         var pontuacao = 0;
         var placar;
-        var fogoAzul
-                    
+        var fogoAzul;
+        var moveCam = false;
+
         function preload() {
             this.load.image('bg', 'assets/bg_space.png');
             this.load.image('player', 'assets/alienigena2.png');
             this.load.image('turbo_nave', 'assets/turbo2.png');
             this.load.image('plataforma', 'assets/planet.png');
-            this.load.image('outra_plataforma', 'assets/planet3.png');
+            this.load.image('plataforma3', 'assets/planet2.png');
+            this.load.image('plataforma2', 'assets/planet3.png');
+            this.load.image('plataforma4', 'assets/planet4.png');
+            this.load.image('plataforma5', 'assets/planet5.png');
+            this.load.image('plataforma6', 'assets/planet6.png');
+            this.load.image('plataforma7', 'assets/planet7.png');
             this.load.image('moeda', 'assets/star.png')
             this.load.image('turbo_nitro', 'assets/turboA.png');
         }
 
         function create() {
-            this.add.image(larguraJogo / 2, alturaJogo / 2, 'bg');
+            this.add.image(larguraJogo, alturaJogo, 'bg');
                     
             fogo = this.add.sprite(0, 0, 'turbo_nave');
             fogo.setVisible(false)
@@ -70,27 +83,47 @@
             fogoAzul = this.add.sprite(0, 0, 'turbo_nitro');
             fogoAzul.setVisible(false)
                     
-            alien = this.physics.add.sprite(larguraJogo / 2, 0, 'player');
-            alien.setCollideWorldBounds(true);
+            alien = this.physics.add.sprite(larguraJogo/2, alturaJogo/2, 'player');
+            alien.setCollideWorldBounds(true); 
                     
-            plataforma = this.physics.add.staticImage(550, 300, 'plataforma');
-            this.physics.add.collider(alien, plataforma,);
+            plataforma = this.physics.add.staticImage(190, 1660, 'plataforma');
+            this.physics.add.collider(alien, plataforma);
                     
-            outra_plataforma = this.physics.add.staticImage(150, 450, 'outra_plataforma');
-            this.physics.add.collider(alien, outra_plataforma);
+            plataforma2 = this.physics.add.staticImage(220, 380, 'plataforma2');
+            this.physics.add.collider(alien, plataforma2);
+
+            plataforma3 = this.physics.add.staticImage(300, 1140, 'plataforma3');
+            this.physics.add.collider(alien, plataforma3);
+
+            plataforma4 = this.physics.add.staticImage(1780, 1020, 'plataforma4');
+            this.physics.add.collider(alien, plataforma4);
+
+            plataforma5 = this.physics.add.staticImage(970, 760, 'plataforma5');
+            this.physics.add.collider(alien, plataforma5);
+
+            plataforma6 = this.physics.add.staticImage(1430, 1500, 'plataforma6');
+            this.physics.add.collider(alien, plataforma6);
+
+            plataforma7 = this.physics.add.staticImage(1610, 280, 'plataforma7');
+            this.physics.add.collider(alien, plataforma7);
                     
             moeda = this.physics.add.sprite(larguraJogo / 2, 0, 'moeda');
-            moeda.setCollideWorldBounds(true);
-            moeda.setBounce(0.5);
-            this.physics.add.collider(moeda, plataforma)
-            this.physics.add.collider(moeda, outra_plataforma)
-                    
+            moeda.setCollideWorldBounds(true); 
+            this.physics.world.setBounds(1, 1, 2200, 2000);
+            this.physics.add.collider(moeda, plataforma);
+            this.physics.add.collider(moeda, plataforma2);
+            this.physics.add.collider(moeda, plataforma3);
+            this.physics.add.collider(moeda, plataforma4);
+            this.physics.add.collider(moeda, plataforma5);
+            this.physics.add.collider(moeda, plataforma6);
+            this.physics.add.collider(moeda, plataforma7);
+            moeda.setBounce(0.2);
+
             placar = this.add.text(50, 50, 'estrelas: ' + pontuacao, { fontSize: '45px', fill: '#495613' });
             this.physics.add.overlap(alien, moeda, function () {
-
                 moeda.setVisible(false);
 
-                var posicaoMoeda_Y = Phaser.Math.RND.between(50, 650);
+                var posicaoMoeda_Y = Phaser.Math.RND.between(10, 2000);
                 moeda.setPosition(posicaoMoeda_Y, 100);
 
                 pontuacao +=1;
@@ -100,30 +133,31 @@
             });
 
             this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-
             this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-
             this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-
             this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-
-            this.keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT)
+            this.keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+            this.cursors = this.input.keyboard.createCursorKeys();
+            
+            this.cameras.main.setBounds(0, 0, larguraJogo * 2, alturaJogo * 2);
+            this.cameras.main.startFollow(alien, true);
+            this.cameras.main.setDeadzone(200, 100);
         }
-                    
+
         function update() {         
             if (this.keyA.isDown) {
-                alien.setVelocityX(-150);
+                alien.setVelocityX(-200);
             } else if (this.keyD.isDown) {
-                alien.setVelocityX(150);
+                alien.setVelocityX(200);
             } else {
                 alien.setVelocityX(0);
             }
 
             if (this.keyW.isDown) {
-                alien.setVelocityY(-150);
+                alien.setVelocityY(-200);
                 ativarTurbo();
             } else if (this.keyS.isDown){
-                alien.setVelocityY(250);
+                alien.setVelocityY(400);
                 semTurbo();
             } else {
                 semTurbo();
@@ -131,7 +165,13 @@
 
             if (this.keySHIFT.isDown) {
                 if (this.keyW.isDown) {
-                    alien.setVelocityY(-300);
+                    alien.setVelocityY(-600);
+                    ativarOutroTurbo();
+                } else if (this.keyA.isDown) {
+                    alien.setVelocityX(-600);
+                    ativarOutroTurbo();
+                } else if (this.keyD.isDown) {
+                    alien.setVelocityX(600);
                     ativarOutroTurbo();
                 } else {
                     semOutroTurbo();
@@ -141,11 +181,25 @@
                 semOutroTurbo()
             }
 
-        fogo.setPosition(alien.x, alien.y + alien.height / 2);
-        fogoAzul.setPosition(alien.x, alien.y + alien.height / 2);
-
+            fogo.setPosition(alien.x, alien.y + alien.height / 2);
+            fogoAzul.setPosition(alien.x, alien.y + alien.height / 2);
+            
+            if (moveCam) {
+                if (this.cursors.left.isDown) {
+                    this.cameras.main.scrollX -= 4;
+                }
+                else if (this.cursors.right.isDown) {
+                    this.cameras.main.scrollX += 4;
+                }
+                if (this.cursors.up.isDown) {
+                    this.cameras.main.scrollY -= 4;
+                }
+                else if (this.cursors.down.isDown) {
+                    this.cameras.main.scrollY += 4;
+                }
+            }
         }
-                
+
         function ativarTurbo() {
             fogo.setVisible(true);
         }
